@@ -53,9 +53,13 @@ class FlowgistonChart:
     def _repr_svg_(self):
         return self.graph._repr_svg_()
 
-    def __init__(self, flowgiston_base_klass):
+    def __init__(self, flowgiston_base_klass=None):
         self.graph = Digraph()
-        self.flowgiston_base_klass = flowgiston_base_klass
+
+        if flowgiston_base_klass is None:
+            self.flowgiston_base_klass = flowgiston_base()
+        else:
+            self.flowgiston_base_klass = flowgiston_base_klass
         for klass in flowgiston_base_klass.__subclasses__:
             setattr(self, klass.__name__, klass(self))
 
