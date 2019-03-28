@@ -45,6 +45,9 @@ def flowgiston_base():
         def no(self, node, **kwargs):
             self.fchart.no(self, node, **kwargs)
 
+        def node(self, label, **kwargs):
+            return self._nodegen(label, **kwargs)
+
     return FlowgistonBase
 
 
@@ -60,8 +63,9 @@ class FlowgistonChart:
             self.flowgiston_base_klass = flowgiston_base()
         else:
             self.flowgiston_base_klass = flowgiston_base_klass
-        for klass in flowgiston_base_klass.__subclasses__:
+        for klass in self.flowgiston_base_klass.__subclasses__():
             setattr(self, klass.__name__, klass(self))
+        self.Generic = self.flowgiston_base_klass(self)
 
     def edge(self, n1, n2, label, **kwargs):
         self.graph.edge(n1.name, n2.name, label, **kwargs)
@@ -71,6 +75,12 @@ class FlowgistonChart:
 
     def no(self, n1, n2, **kwargs):
         self.edge(n1, n2, 'No', **kwargs)
+
+    def render(self, *args, **kwargs):
+        return self.graph.render(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        return self.graph.save(*args, **kwargs)
 
 
 class FlowgistonNode:
