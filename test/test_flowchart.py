@@ -44,6 +44,10 @@ class TestFlowchart(TestCase):
 
         b = f.BlueNode.if_('This is a blue node')
         s = b.yes(f.Stop.node())
+        r = f.Generic.process('Generic node', style='dashed')
+
+        f.edge(b, r, "foo")
+
         with TemporaryDirectory() as td:
             f.save('test.gv', td)
             with open(os.path.join(td, 'test.gv'), 'r') as tf:
@@ -60,3 +64,7 @@ class TestFlowchart(TestCase):
 
                 blue_attrs = g.get_node(b.name)[0].get_attributes()
                 self.assertEqual(blue_attrs['fillcolor'], BlueNode.fillcolor)
+
+                edges = g.get_edges()
+                self.assertTrue(len(edges), 2)
+                d = {e.get_source(): e for e in edges}
