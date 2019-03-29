@@ -22,12 +22,12 @@ def flowgiston_base():
             return style
 
         def _name(self):
-            return uuid4().hex
+            return 'n_' + uuid4().hex
 
         def _nodegen(self, label, **kwargs):
             name = self._name()
             self.fchart.graph.node(name, label=label, **self._construct_style(**kwargs))
-            return FlowgistonNode(name, self)
+            return FlowgistonNode(name, label, self)
 
         def conditional(self, label, **kwargs):
             return self._nodegen(label, shape='diamond', **kwargs)
@@ -86,8 +86,9 @@ class FlowgistonChart:
 
 
 class FlowgistonNode:
-    def __init__(self, name, flowbase: 'FlowgistonBase'):
+    def __init__(self, name, label, flowbase: 'FlowgistonBase'):
         self.name = name
+        self.label = label
         self.flowbase = flowbase
 
     def edge(self, node, label=None, **kwargs):
