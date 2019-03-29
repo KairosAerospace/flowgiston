@@ -48,4 +48,15 @@ class TestFlowchart(TestCase):
             f.save('test.gv', td)
             with open(os.path.join(td, 'test.gv'), 'r') as tf:
                 g = pydot.graph_from_dot_data(tf.read())[0]
-                self.assertEqual(g.get_node(s.name)[0].get_attributes()['label'], Stop.label)
+                stop_attrs = g.get_node(s.name)[0].get_attributes()
+
+                # check that it gets the default label from the class variable
+                self.assertEqual(stop_attrs['label'], Stop.label)
+
+                # check that it inherits the other variables
+                self.assertEqual(stop_attrs['fontcolor'], Stop.fontcolor)
+                self.assertEqual(stop_attrs['shape'], Stop.shape)
+                self.assertEqual(stop_attrs['fillcolor'], Stop.fillcolor)
+
+                blue_attrs = g.get_node(b.name)[0].get_attributes()
+                self.assertEqual(blue_attrs['fillcolor'], BlueNode.fillcolor)
