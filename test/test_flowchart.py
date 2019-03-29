@@ -48,6 +48,9 @@ class TestFlowchart(TestCase):
 
         f.edge(b, r, "foo")
 
+        # test overriding of default label
+        s1 = f.Stop.node("STAHHHHP")
+
         with TemporaryDirectory() as td:
             f.save('test.gv', td)
             with open(os.path.join(td, 'test.gv'), 'r') as tf:
@@ -64,6 +67,8 @@ class TestFlowchart(TestCase):
 
                 blue_attrs = g.get_node(b.name)[0].get_attributes()
                 self.assertEqual(blue_attrs['fillcolor'], BlueNode.fillcolor)
+
+                self.assertEqual(g.get_node(s1.name)[0].get_attributes()['label'], "STAHHHHP")
 
                 edges = g.get_edges()
                 self.assertTrue(len(edges), 2)
