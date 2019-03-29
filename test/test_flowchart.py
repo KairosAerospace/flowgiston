@@ -72,4 +72,6 @@ class TestFlowchart(TestCase):
 
                 edges = g.get_edges()
                 self.assertTrue(len(edges), 2)
-                d = {e.get_source(): e for e in edges}
+                d = {e.get_destination(): e for e in edges}
+                self.assertEqual(d[s.name].get_attributes()['label'], 'Yes')
+                self.assertEqual(d[r.name].get_attributes()['label'], 'foo')
