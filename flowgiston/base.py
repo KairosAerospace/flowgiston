@@ -68,9 +68,9 @@ class FlowgistonChart:
             self.flowgiston_base_klass = flowgiston_base()
         else:
             self.flowgiston_base_klass = flowgiston_base_klass
+        self.Generic = self.flowgiston_base_klass(self)
         for klass in self.flowgiston_base_klass.__subclasses__():
             setattr(self, klass.__name__, klass(self))
-        self.Generic = self.flowgiston_base_klass(self)
 
     def edge(self, n1, n2, label, **kwargs):
         self.graph.edge(n1.name, n2.name, label, **kwargs)
