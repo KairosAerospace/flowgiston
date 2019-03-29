@@ -27,3 +27,25 @@ class TestFlowchart(TestCase):
                     self.assertEqual(n3_attribs['label'], n3.label)
                     self.assertEqual(n3_attribs['shape'], 'diamond')
                     self.assertEqual(n3_attribs['fillcolor'], 'blue')
+
+    def test_inheritance(self):
+        Base = flowgiston_base()
+
+        class BlueNode(Base):
+            fillcolor = 'blue'
+
+        class Stop(Base):
+            fillcolor = 'red'
+            fontcolor = 'white'
+            shape = 'octagon'
+            label = 'STOP'
+
+        f = FlowgistonChart(Base)
+
+        b = f.BlueNode.if_('This is a blue node')
+        s = b.yes(f.Stop.node())
+        with TemporaryDirectory() as td:
+            f.save('test.gv', td)
+            with open(os.path.join(td, 'test.gv'), 'r') as tf:
+                g = pydot.graph_from_dot_data(tf.read())[0]
+                self.assertEqual(g.get_node(s.name)[0].get_attributes()['label'], Stop.label)

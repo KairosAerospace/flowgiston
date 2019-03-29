@@ -26,6 +26,11 @@ def flowgiston_base():
 
         def _nodegen(self, label, **kwargs):
             name = self._name()
+            if label is None:
+                label = kwargs.get('label', None)
+            if label is None:
+                label = getattr(self, 'label', None)
+
             self.fchart.graph.node(name, label=label, **self._construct_style(**kwargs))
             return FlowgistonNode(name, label, self)
 
@@ -45,7 +50,7 @@ def flowgiston_base():
         def no(self, node, **kwargs):
             self.fchart.no(self, node, **kwargs)
 
-        def node(self, label, **kwargs):
+        def node(self, label=None, **kwargs):
             return self._nodegen(label, **kwargs)
 
     return FlowgistonBase
