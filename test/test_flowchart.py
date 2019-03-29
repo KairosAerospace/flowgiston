@@ -26,8 +26,3 @@ class TestFlowchart(TestCase):
                     n3_attribs = g.get_node(n3.name)[0].get_attributes()
                     self.assertEqual(n3_attribs['label'], n3.label)
                     self.assertEqual(n3_attribs['shape'], 'diamond')
-
-                    #         v = tf.readlines()
-                    #         n3_txt = [x for x in v if 'N3' in x]
-                    #         self.assertEqual(len(n3_txt), 1)
-                    #         self.assertIn('shape=diamond', n3_txt[0])
