@@ -30,14 +30,35 @@ def flowgiston_base():
                     self._base_style[a] = getattr(self, a)
 
         def _construct_style(self, **kwargs):
+            """
+            Constructs a style dict from the passed kwargs and the base style
+            Args:
+                **kwargs:
+
+            Returns: dict
+
+            """
             style = self._base_style.copy()
             style.update(kwargs)
             return style
 
         def _name(self):
+            """
+            Returns a random name for this node.
+            Returns: str
+
+            """
             return 'n_' + uuid4().hex
 
-        def _nodegen(self, label, **kwargs):
+        def _nodegen(self, label: str, **kwargs) -> 'FlowgistonNode':
+            """
+            Wraps the graphviz node creation.
+            Args:
+                label: Label for this node.  If it's None, checks to see if there's a label in the keyword args or on the class attributes, in that order.
+
+            Returns: a FlowgistonNode
+
+            """
             name = self._name()
             if label is None:
                 label = kwargs.get('label', None)
