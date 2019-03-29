@@ -18,7 +18,7 @@ class TestFlowchart(TestCase):
                 self.assertEqual(g.get_node(n1.name)[0].get_attributes()['label'], n1.label)
                 self.assertEqual(g.get_node(n2.name)[0].get_attributes()['label'], n2.label)
                 self.assertEqual(len(g.get_edges()), 1)
-            n3 = n2.edge(f.Generic.if_("N3"), fillcolor='blue')
+            n3 = n2.edge(f.Generic.if_("N3", fillcolor='blue'))
             with TemporaryDirectory() as td:
                 f.save('test.gv', td)
                 with open(os.path.join(td, 'test.gv'), 'r') as tf:
@@ -26,3 +26,4 @@ class TestFlowchart(TestCase):
                     n3_attribs = g.get_node(n3.name)[0].get_attributes()
                     self.assertEqual(n3_attribs['label'], n3.label)
                     self.assertEqual(n3_attribs['shape'], 'diamond')
+                    self.assertEqual(n3_attribs['fillcolor'], 'blue')

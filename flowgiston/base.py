@@ -33,8 +33,8 @@ def flowgiston_base():
             return self._nodegen(label, shape='diamond', **kwargs)
 
         # shorthand for conditional
-        def if_(self, label):
-            return self.conditional(label)
+        def if_(self, label, **kwargs):
+            return self.conditional(label, **kwargs)
 
         def process(self, label, **kwargs):
             return self._nodegen(label, shape='box', **kwargs)
