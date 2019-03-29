@@ -1,5 +1,5 @@
 from unittest import TestCase
-from flowgiston.base import *
+from flowgiston import *
 from tempfile import TemporaryDirectory
 import os
 import pydot

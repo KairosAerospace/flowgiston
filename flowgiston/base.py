@@ -4,15 +4,28 @@ from graphviz import Digraph
 
 def flowgiston_base():
     class FlowgistonBase:
-        __STYLE_ATTRIBS = ['style', 'shape', 'fillcolor', 'fontcolor']
+        # copied from here: https://www.graphviz.org/doc/info/attrs.html
+        __GV_NODE_ATTRIBS = [
+            'area', 'color', 'comment', 'colorscheme', 'distortion', 'fillcolor', 'fixedsize', 'fontcolor', 'fontname',
+            'gradientangle', 'group', 'height', 'href', 'id', 'image', 'imagepos', 'imagescale', 'labelloc', 'layer',
+            'margin', 'nojustify', 'ordering', 'penwidth', 'peripheries', 'pin', 'pos', 'rects', 'regular', 'root',
+            'samplepoints', 'shape', 'shapefile', 'showboxes', 'sides', 'skew', 'sortv', 'style', 'target', 'tooltip',
+            'width', 'vertices', 'xlabel', 'xlp', 'z'
+        ]
+        # All node types should inherit from this type
         style = 'filled'
 
         def __init__(self, fchart: 'FlowgistonChart'):
+            """
+            No need to call this, it gets called automagically when you create a flowchart.
+            Args:
+                fchart: A FlowgistonChart
+            """
             self.fchart = fchart
 
             # populate style features from the class
             self._base_style = {}
-            for a in FlowgistonBase.__STYLE_ATTRIBS:
+            for a in self.__GV_NODE_ATTRIBS:
                 if hasattr(self, a):
                     self._base_style[a] = getattr(self, a)
 
