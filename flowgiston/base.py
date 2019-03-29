@@ -76,11 +76,13 @@ class FlowgistonChart:
     def no(self, n1, n2, **kwargs):
         self.edge(n1, n2, 'No', **kwargs)
 
-    def render(self, *args, **kwargs):
-        return self.graph.render(*args, **kwargs)
+    def render(self, filename=None, directory=None, view=False, cleanup=False, format=None, renderer=None,
+               formatter=None):
+        return self.graph.render(filename=filename, directory=directory, view=view, cleanup=cleanup, format=format,
+                                 renderer=renderer, formatter=formatter)
 
-    def save(self, *args, **kwargs):
-        return self.graph.save(*args, **kwargs)
+    def save(self, filename=None, directory=None):
+        return self.graph.save(filename=filename, directory=directory)
 
 
 class FlowgistonNode:
