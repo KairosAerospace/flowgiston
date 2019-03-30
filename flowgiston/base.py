@@ -3,6 +3,13 @@ from graphviz import Digraph
 
 
 def flowgiston_base():
+    """
+    Returns an instance of the FlowgistonBase class.  Subclassing this class allows users to apply their own
+     styling and those classes will be made available in instances of FlowgistonChart associated with this class.
+    Returns: A class of type FlowgistonBase
+
+    """
+
     class FlowgistonBase:
         # copied from here: https://www.graphviz.org/doc/info/attrs.html
         __GV_NODE_ATTRIBS = [
@@ -33,7 +40,7 @@ def flowgiston_base():
             """
             Constructs a style dict from the passed kwargs and the base style
             Args:
-                **kwargs:
+                **kwargs: keyword args to pass for node styling
 
             Returns: dict
 
@@ -55,8 +62,8 @@ def flowgiston_base():
             Wraps the graphviz node creation.
             Args:
                 label: Label for this node.  If it's None, checks to see if there's a label in the keyword args or on the class attributes, in that order.
-
-            Returns: a FlowgistonNode
+                kwargs**: keyword args to pass for node styling
+            Returns: a new FlowgistonNode corresponding to this object
 
             """
             name = self._name()
@@ -68,23 +75,77 @@ def flowgiston_base():
             self.fchart.graph.node(name, label=label, **self._construct_style(**kwargs))
             return FlowgistonNode(name, label, self)
 
-        def conditional(self, label, **kwargs):
+        def conditional(self, label: str, **kwargs) -> 'FlowgistonNode':
+            """
+            Generate a conditional node (diamond)
+            Args:
+                label: Label for this node
+                **kwargs: keyword args to pass for node styling
+
+            Returns: A conditional FlowgistonNode
+
+            """
             return self._nodegen(label, shape='diamond', **kwargs)
 
         # shorthand for conditional
-        def if_(self, label, **kwargs):
+        def if_(self, label: str, **kwargs) -> 'FlowgistonNode':
+            """
+            Shorthand for conditional
+            Args:
+                label: Label for this node
+                **kwargs: keyword args to pass for node styling
+
+            Returns: A conditional FlowgistonNode
+
+            """
             return self.conditional(label, **kwargs)
 
-        def process(self, label, **kwargs):
+        def process(self, label: str, **kwargs):
+            """
+            Create a process node (rectangle)
+            Args:
+                label: Label for this node
+                **kwargs: keyword args to pass for node styling
+
+            Returns: A process FlowgistonNode
+
+            """
             return self._nodegen(label, shape='box', **kwargs)
 
-        def yes(self, node, **kwargs):
+        def yes(self, node: 'FlowgistonNode', **kwargs) -> 'FlowgistonNode':
+            """
+            Generates an outbound edge to another node labeled 'Yes'
+            Args:
+                node: The destination node
+                **kwargs: Keyword args for styling this edge
+
+            Returns: The destination FlowgistonNode
+
+            """
             self.fchart.yes(self, node, **kwargs)
 
-        def no(self, node, **kwargs):
+        def no(self, node, **kwargs) -> 'FlowgistonNode':
+            """
+            Generates an outbound edge to another node labeled 'No'
+            Args:
+                node: The destination node
+                **kwargs: Keyword args for styling this edge
+
+            Returns: The destination FlowgistonNode
+
+            """
             self.fchart.no(self, node, **kwargs)
 
-        def node(self, label=None, **kwargs):
+        def node(self, label=None, **kwargs) -> 'FlowgistonNode':
+            """
+            Generates a generic node with the default styling for the class
+            Args:
+                label: An optional label for this node
+                **kwargs: Keyword args for styling this node
+
+            Returns: A FlowgistonNode
+
+            """
             return self._nodegen(label, **kwargs)
 
     return FlowgistonBase
