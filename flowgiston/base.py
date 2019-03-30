@@ -2,10 +2,11 @@ from uuid import uuid4
 from graphviz import Digraph
 
 
-def flowgiston_base():
+def flowgiston_base(**base_style):
     """
     Returns an instance of the FlowgistonBase class.  Subclassing this class allows users to apply their own
      styling and those classes will be made available in instances of FlowgistonChart associated with this class.
+    Args: base_style (Optional) styling tags to apply to generic nodes
     Returns: A class of type FlowgistonBase
 
     """
@@ -31,7 +32,10 @@ def flowgiston_base():
             self.fchart = fchart
 
             # populate style features from the class
-            self._base_style = {}
+            if base_style is None:
+                self._base_style = {}
+            else:
+                self._base_style = base_style.copy()
             for a in self.__GV_NODE_ATTRIBS:
                 if hasattr(self, a):
                     self._base_style[a] = getattr(self, a)
@@ -112,6 +116,30 @@ def flowgiston_base():
             """
             return self._nodegen(label, shape='box', **kwargs)
 
+        def start(self, label: str = 'Start', **kwargs):
+            """
+            Create a start node (oval)
+            Args:
+                label: An optional label for this node.  Defaults to 'Start'
+                **kwargs: keyword args to pass for node styling
+
+            Returns: A start FlowgistonNode
+
+            """
+            return self._nodegen(label, shape='oval', **kwargs)
+
+        def end(self, label: str = 'End', **kwargs):
+            """
+            Create an end node (oval)
+            Args:
+                label: An optional label for this node.  Defaults to 'End'
+                **kwargs: keyword args to pass for node styling
+
+            Returns: A start FlowgistonNode
+
+            """
+            return self._nodegen(label, shape='oval', **kwargs)
+
         def yes(self, node: 'FlowgistonNode', **kwargs) -> 'FlowgistonNode':
             """
             Generates an outbound edge to another node labeled 'Yes'
@@ -156,7 +184,7 @@ class FlowgistonChart:
     def _repr_svg_(self):
         return self.graph._repr_svg_()
 
-    def __init__(self, flowgiston_base_klass=None):
+    def __init__(self, flowgiston_base_klass=None, base_style=None):
         self.graph = Digraph()
 
         if flowgiston_base_klass is None:
@@ -175,6 +203,18 @@ class FlowgistonChart:
 
     def no(self, n1, n2, **kwargs):
         self.edge(n1, n2, 'No', **kwargs)
+
+    def start(self, label, **kwargs):
+        return self.Generic.start(label, **kwargs)
+
+    def end(self, label, **kwargs):
+        return self.Generic.end(label, **kwargs)
+
+    def if_(self, label, **kwargs):
+        return self.Generic.conditional(label, **kwargs)
+
+    def node(self, label, **kwargs):
+        return self.Generic.conditional(label, **kwargs)
 
     def render(self, filename=None, directory=None, view=False, cleanup=False, format=None, renderer=None,
                formatter=None):
