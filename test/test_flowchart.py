@@ -75,3 +75,17 @@ class TestFlowchart(TestCase):
                 d = {e.get_destination(): e for e in edges}
                 self.assertEqual(d[s.name].get_attributes()['label'], 'Yes')
                 self.assertEqual(d[r.name].get_attributes()['label'], 'foo')
+
+    def test_base_style(self):
+        Base = flowgiston_base(fillcolor='green')
+        chart = FlowgistonChart(Base)
+        n = chart.process("A Green Node", style='dotted,filled')
+        chart.save('foo.gv', '/tmp')
+        with TemporaryDirectory() as td:
+            chart.save('test.gv', td)
+            with open(os.path.join(td, 'test.gv'), 'r') as tf:
+                g = pydot.graph_from_dot_data(tf.read())[0]
+                attrs = g.get_node(n.name)[0].get_attributes()
+                self.assertEqual(attrs['fillcolor'], 'green')
+                self.assertIn('dotted', attrs['style'])
+                self.assertIn('filled', attrs['style'])

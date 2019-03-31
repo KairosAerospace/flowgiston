@@ -184,7 +184,12 @@ class FlowgistonChart:
     def _repr_svg_(self):
         return self.graph._repr_svg_()
 
-    def __init__(self, flowgiston_base_klass=None, base_style=None):
+    def __init__(self, flowgiston_base_klass=None):
+        """
+
+        Args:
+            flowgiston_base_klass: a class of type FlowgistonBase
+        """
         self.graph = Digraph()
 
         if flowgiston_base_klass is None:
@@ -212,6 +217,9 @@ class FlowgistonChart:
 
     def if_(self, label, **kwargs):
         return self.Generic.conditional(label, **kwargs)
+
+    def process(self, label, **kwargs):
+        return self.Generic.process(label, **kwargs)
 
     def node(self, label, **kwargs):
         return self.Generic.conditional(label, **kwargs)
