@@ -200,53 +200,187 @@ class FlowgistonChart:
         for klass in self.flowgiston_base_klass.__subclasses__():
             setattr(self, klass.__name__, klass(self))
 
-    def edge(self, n1, n2, label, **kwargs):
+    def edge(self, n1: 'FlowgistonNode', n2: 'FlowgistonNode', label: str, **kwargs) -> None:
+        """
+        Create an edge between two nodes
+        Args:
+            n1: Source node
+            n2: Destination node
+            label: Label for this edge
+            **kwargs: Keyword args for styling this node
+
+        Returns: None
+
+        """
         self.graph.edge(n1.name, n2.name, label, **kwargs)
 
-    def yes(self, n1, n2, **kwargs):
+    def yes(self, n1: 'FlowgistonNode', n2: 'FlowgistonNode', **kwargs) -> None:
+        """
+        Create a directed edge labeled 'Yes'
+        Args:
+            n1: Source node
+            n2: Destination node
+            **kwargs: Keyword args for styling this node
+
+        Returns: None
+
+        """
         self.edge(n1, n2, 'Yes', **kwargs)
 
-    def no(self, n1, n2, **kwargs):
+    def no(self, n1: 'FlowgistonNode', n2: 'FlowgistonNode', **kwargs) -> None:
+        """
+        Create a directed edge labeled 'No'
+        Args:
+            n1: Source node
+            n2: Destination node
+            **kwargs: Keyword args for styling this node
+
+        Returns: None
+
+        """
         self.edge(n1, n2, 'No', **kwargs)
 
-    def start(self, label, **kwargs):
+    def start(self, label: str, **kwargs) -> 'FlowgistonNode':
+        """
+        Create a default styled Start node
+        Args:
+            label: a label for this node.  If None, 'Start' is used.
+            **kwargs: Keyword args for styling this node
+
+        Returns: The created node
+
+        """
         return self.Generic.start(label, **kwargs)
 
-    def end(self, label, **kwargs):
+    def end(self, label: str, **kwargs) -> 'FlowgistonNode':
+        """
+        Create a default styled End node
+        Args:
+            label: A label for this node.  If None, 'End' is used
+            **kwargs: Keyword args for styling this node
+
+        Returns: The created node
+
+        """
         return self.Generic.end(label, **kwargs)
 
-    def if_(self, label, **kwargs):
+    def if_(self, label: str, **kwargs) -> 'FlowgistonNode':
+        """
+        Create a default styled conditional node
+        Args:
+            label: A label for this node.
+            **kwargs: Keyword args for styling this node
+
+        Returns: The created node
+
+        """
         return self.Generic.conditional(label, **kwargs)
 
-    def process(self, label, **kwargs):
+    def process(self, label: str, **kwargs) -> 'FlowgistonNode':
+        """
+        Create a default styled process node
+        Args:
+            label: A label for this node.
+            **kwargs: Keyword args for styling this node
+
+        Returns: The created node
+
+        """
         return self.Generic.process(label, **kwargs)
 
-    def node(self, label, **kwargs):
+    def node(self, label: str, **kwargs) -> 'FlowgistonNode':
+        """
+        Create a default styled node
+        Args:
+            label: A label for this node.
+            **kwargs: Keyword args for styling this node
+
+        Returns: The created node
+
+        """
         return self.Generic.conditional(label, **kwargs)
 
     def render(self, filename=None, directory=None, view=False, cleanup=False, format=None, renderer=None,
                formatter=None):
+        """
+        A wrapper around the graphgiz.Digraph.render
+        Args:
+            filename:
+            directory:
+            view:
+            cleanup:
+            format:
+            renderer:
+            formatter:
+
+        Returns:
+
+        """
         return self.graph.render(filename=filename, directory=directory, view=view, cleanup=cleanup, format=format,
                                  renderer=renderer, formatter=formatter)
 
     def save(self, filename=None, directory=None):
+        """
+        A wrapper around graphviz.Digraph.save
+        Args:
+            filename:
+            directory:
+
+        Returns:
+
+        """
         return self.graph.save(filename=filename, directory=directory)
 
 
 class FlowgistonNode:
-    def __init__(self, name, label, flowbase: 'FlowgistonBase'):
+    def __init__(self, name: str, label: str, flowbase: 'FlowgistonBase'):
+        """
+
+        Args:
+            name: A string to be used as the name for this node.  The name is only used internally.
+            label: A label for this node
+            flowbase: A class of type FlowgistonBase
+        """
         self.name = name
         self.label = label
         self.flowbase = flowbase
 
-    def edge(self, node, label=None, **kwargs):
+    def edge(self, node: 'FlowgistonNode', label=None, **kwargs) -> 'FlowgistonNode':
+        """
+        Create an edge from this node to another node
+        Args:
+            node: The destination node
+            label: A label for this edge.  Default is no label.
+            **kwargs: Keyword args for styling this node
+
+        Returns: The destination node
+
+        """
         self.flowbase.fchart.graph.edge(self.name, node.name, label=label, **kwargs)
         return node
 
-    def yes(self, node, **kwargs):
+    def yes(self, node: 'FlowgistonNode', **kwargs) -> 'FlowgistonNode':
+        """
+        Create an edge from this node to another node labeled 'yes'
+        Args:
+            node: The destination node
+            **kwargs: Keyword args for styling this node
+
+        Returns: The destination node
+
+        """
         self.edge(node, label='Yes', **kwargs)
         return node
 
-    def no(self, node, **kwargs):
+    def no(self, node: 'FlowgistonNode', **kwargs) -> 'FlowgistonNode':
+        """
+      Create an edge from this node to another node labeled 'no'
+        Args:
+            node: The destination node
+            **kwargs: Keyword args for styling this node
+
+        Returns: The destination node
+
+        """
         self.edge(node, label='No', **kwargs)
         return node
