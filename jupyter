@@ -1,0 +1,88 @@
+def askAnimal(num: number):
+    global index
+    if num == 1:
+        list2.pop()
+        list2.pop()
+        game.splash(list2)
+        num = 2
+    elif num == 2:
+        game.splash(list2)
+        num = 4
+    else:
+        spriteTalk("You didn't type 1 or 2!", 3000)
+        gameover()
+    while index <= num - 1:
+        if not (game.ask_for_string("What is the animal in place " + ("" + str((index + 1))) + "?") == list2[index]):
+            gameover()
+        index += 1
+def spriteTalk(text: str, num2: number):
+    mySprite.say_text(text)
+    pause(num2)
+def gameover():
+    scene.set_background_image(assets.image("""
+        locked
+    """))
+    mySprite.say_text("... and we're locked out of the system.. :(")
+    pause(2000)
+    game.over(False)
+index = 0
+num3 = 0
+guess_count = 0
+guess = ""
+mySprite: Sprite = None
+list2: List[str] = []
+num32 = 0
+animals = ["dog", "cat", "bear", "fish", "goat", "crab"]
+list2 = [animals._pick_random(),
+    animals._pick_random(),
+    animals._pick_random(),
+    animals._pick_random()]
+scene.set_background_image(assets.image("""
+    beans
+"""))
+mySprite = sprites.create(img("""
+        . . f f f f f f f f f f f f . . 
+            . . f f f f f f f f f f f f . . 
+            . . f f f f f f f f f f f f . . 
+            . . f f 9 9 f f f f 9 9 f f . . 
+            . . f f 9 9 f f f f 9 9 f f . . 
+            . . f f f f f f f f f f f f . . 
+            . . f f 8 9 8 9 8 9 8 9 f f . . 
+            . . f f 9 8 9 8 9 8 9 8 f f . . 
+            . . f f f f f f f f f f f f . . 
+            . . f f f f f f f f f f f f . . 
+            . . f f f f f f f f f f f f . . 
+            . . . . . . . f f . . . . . . . 
+            . . . . f f f f f f f f . . . . 
+            . . . . . . f f f f . . . . . . 
+            . . . . . . f . . f . . . . . . 
+            . . . . . . f . . f . . . . . .
+    """),
+    SpriteKind.player)
+password = "red"
+spriteTalk("You are going to hack into a computer!", 2000)
+spriteTalk("First, you need to guess the password.", 2000)
+spriteTalk("We have intel that the password is a color and rhymes with bread",
+    3000)
+while guess != password and guess_count < 3:
+    if guess_count < 3:
+        guess = game.ask_for_string("What is the password?")
+        guess_count += 1
+    else:
+        gameover()
+if guess == password:
+    spriteTalk("YOU DID IT!!!", 2000)
+else:
+    gameover()
+spriteTalk("Now we have one more security check to do before we're in the system.",
+    2000)
+spriteTalk("We must now do a memorization check.", 2000)
+spriteTalk("A series of animal names will pop up before you.", 2000)
+spriteTalk("You will have to memorize the order of the names they come in.",
+    2000)
+askAnimal(game.ask_for_number("Easy or Hard mode? 1 for Easy, 2 for Hard."))
+scene.set_background_image(assets.image("""
+    hacked
+"""))
+spriteTalk("WE'RE IN THE SYSTEM!!!!", 2000)
+game.over(True)
